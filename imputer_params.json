@@ -1,0 +1,102 @@
+{
+    "heatmap": {
+        "ModelConfig": {
+            "sigma": 10,
+            "time_window": 5
+        },
+        "DataConfig": {
+            "batch_size": 1,
+            "num_workers": 8,
+            "pin_memory": true
+        }
+    },
+    "transformer": {
+        "ModelConfig": {
+            "dim_hidden": 128,
+            "num_heads": 16,
+            "num_layers": 1,
+            "dropout": 0.2,
+            "dim_feedforward": 256,
+            "ln": true
+        },
+        "DataConfig": {
+            "batch_size": 32,
+            "num_workers": 80,
+            "pin_memory": true,
+            "prefetch_factor": 2
+        },
+        "TrainerConfig": {
+            "max_epochs": 200,
+            "min_epochs": 100,
+            "accelerator": "gpu",
+            "gradient_clip_val": 5.0,
+            "check_val_every_n_epoch": 1
+        },
+        "OptimizerConfig": {
+            "optimizer_params": {
+                "lr": 1e-4,
+                "weight_decay": 1e-5
+            }
+        },
+        "EarlyStopConfig": {
+            "patience": 5,
+            "min_delta": 1e-5,
+            "mode": "min",
+            "strict": false,
+            "verbose": true
+        },
+        "ModelCheckpoint": {
+            "save_top_k": 1,
+            "verbose": true,
+            "mode": "min"
+        }
+    },
+    "xgboost": {
+        "ModelConfig": {
+            "objective": "reg:squarederror",
+            "colsample_bytree": 0.8,
+            "subsample": 0.3,
+            "learning_rate": 0.015,
+            "max_depth": 7,
+            "gamma": 5,
+            "n_estimators": 400,
+            "enable_categorical": true,
+            "n_jobs": -1,
+            "tree_method": "hist",
+            "device": "cuda",
+            "verbosity": 1
+        },
+        "DataConfig": {
+            "batch_size": 32,
+            "num_workers": 30,
+            "pin_memory": true
+        }
+    },
+    "lstm": {
+        "ModelConfig": {
+            "dim_hidden": 128,
+            "activation": "gelu"
+        },
+        "DataConfig": {
+            "batch_size": 16,
+            "num_workers": 8,
+            "pin_memory": true,
+            "prefetch_factor": 2
+        },
+        "TrainerConfig": {
+            "accelerator": "gpu",
+            "devices": 1,
+            "precision": 16,
+            "gradient_clip_val": 1.0,
+            "log_every_n_steps": 50,
+            "max_steps": 50000
+        },
+        "epochs": 1,
+        "lr": 5e-4,
+        "weight_decay": 0.05,
+        "warmup_steps": 5000,
+        "scheduler": "linear",
+        "loss_fn": "MSELoss",
+        "optimizer": "adamw"
+    }
+}
